@@ -1,0 +1,45 @@
+* {
+    -fx-tick-label-fill: rgb(224, 226, 228);
+}
+
+.text-field {
+    -fx-background-color: linear-gradient(#afafaf 0.2, white 1);
+    -fx-effect: innershadow(gaussian, #1e1e1e, 8, 0.3, 0, 0);
+    -fx-font-size: 13;
+    -fx-font-weight: bolder;
+}
+
+.text-field, .spinner, .button {
+    -fx-border-color: #1e1e1e;
+    -fx-border-radius: 4;
+    -fx-border-width: 1;
+    -fx-border-insets: -1;
+}
+
+.button {
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(rgb(100,100,100) 0, rgb(42,42,42) 1);
+    -fx-effect: dropshadow(gaussian, #1e1e1e, 4, 0.5, 0, 0);
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(rgb(120,120,120) 0, rgb(52,52,52) 1);
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(rgb(80,80,80) 0, rgb(30,30,30) 1);
+}
+
+.container {
+    -fx-background-color: rgb(48, 48, 48);
+}
+
+.label, .check-box {
+    -fx-text-fill: rgb(224, 226, 228);
+    -fx-effect: dropshadow(gaussian, #1e1e1e, 3, 0.25, 2, 2);
+}
+
+.shape-pane {
+    -fx-background-color: white;
+    -fx-effect: innershadow(gaussian, #1e1e1e, 15, 0.2, 0, 0);
+}

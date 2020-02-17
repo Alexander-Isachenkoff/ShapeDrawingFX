@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox onScroll="#onScroll" prefHeight="540.0" prefWidth="720.0" spacing="5.0" styleClass="container" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+    <Pane fx:id="shapePane" styleClass="shape-pane" stylesheets="@style.css" HBox.hgrow="ALWAYS" />
+    <VBox alignment="TOP_CENTER" HBox.hgrow="NEVER" />
+    <BorderPane prefHeight="520.0" prefWidth="125.0">
+        <top>
+            <VBox BorderPane.alignment="CENTER">
+                <Label maxWidth="1.7976931348623157E308" stylesheets="@style.css" text="Размер">
+                    <VBox.margin>
+                        <Insets bottom="2.0" />
+                    </VBox.margin>
+                </Label>
+                <Spinner fx:id="sizeSpinner" editable="true" stylesheets="@style.css">
+                    <VBox.margin>
+                        <Insets bottom="5.0" />
+                    </VBox.margin>
+                </Spinner>
+                <Label maxWidth="1.7976931348623157E308" stylesheets="@style.css" text="Площадь">
+                    <VBox.margin>
+                        <Insets bottom="2.0" />
+                    </VBox.margin>
+                </Label>
+                <TextField fx:id="squareField" alignment="CENTER_RIGHT" editable="false" styleClass="text-field" stylesheets="@style.css" />
+            </VBox>
+        </top>
+        <center>
+            <VBox fx:id="scalePane" alignment="CENTER" cache="true" fillWidth="false" spacing="5.0" BorderPane.alignment="CENTER">
+                <Label maxWidth="1.7976931348623157E308" style="-fx-font-size: 14;" stylesheets="@style.css" text="Масштаб" />
+                <Slider fx:id="scaleSlider" blockIncrement="5.0" majorTickUnit="10.0" max="200.0" maxHeight="400.0" min="10.0" orientation="VERTICAL" prefWidth="55.0" showTickLabels="true" showTickMarks="true" stylesheets="@style.css" value="100.0" VBox.vgrow="ALWAYS">
+                    <VBox.margin>
+                        <Insets bottom="8.0" />
+                    </VBox.margin>
+                </Slider>
+                <Button onAction="#resetScale" prefWidth="54.0" stylesheets="@style.css" text="100 %" />
+                <BorderPane.margin>
+                    <Insets bottom="15.0" top="15.0" />
+                </BorderPane.margin>
+            </VBox>
+        </center>
+        <bottom>
+            <CheckBox fx:id="fitToWindowCb" maxWidth="1.7976931348623157E308" stylesheets="@style.css" text="Под размер окна" wrapText="true" BorderPane.alignment="CENTER" />
+        </bottom>
+    </BorderPane>
+</HBox>
