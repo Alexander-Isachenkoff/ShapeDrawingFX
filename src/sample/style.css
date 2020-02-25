@@ -41,5 +41,4 @@
 
 .shape-pane {
     -fx-background-color: white;
-    -fx-effect: innershadow(gaussian, #1e1e1e, 15, 0.2, 0, 0);
 }

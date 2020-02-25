@@ -47,11 +47,11 @@ public class Controller implements Initializable
     }
     
     private void update() {
-        updateFigure();
-        updateSquare();
+        repaintFigure();
+        recalculateSquare();
     }
     
-    private void updateFigure() {
+    private void repaintFigure() {
         updateFigureSize();
         updateFigureScale();
         updateFigureTranslate();
@@ -81,22 +81,22 @@ public class Controller implements Initializable
     }
     
     private void updateFigureTranslate() {
-        double x = (shapePane.getWidth() - figure.getDiagonal()) / 2;
-        double y = (shapePane.getHeight() - figure.getDiagonal()) / 2;
+        double x = (shapePane.getWidth() - figure.getSquareDiagonal()) / 2;
+        double y = (shapePane.getHeight() - figure.getSquareDiagonal()) / 2;
         figure.setTranslateX(x);
         figure.setTranslateY(y);
     }
     
     private void clipFigure() {
-        Shape clip = new Rectangle(shapePane.getWidth() - 2, shapePane.getHeight() - 2);
-        clip.setTranslateX(-figure.getTranslateX() + 1);
-        clip.setTranslateY(-figure.getTranslateY() + 1);
+        Shape clip = new Rectangle(shapePane.getWidth(), shapePane.getHeight());
+        clip.setTranslateX(-figure.getTranslateX());
+        clip.setTranslateY(-figure.getTranslateY());
         clip.setScaleX(1 / figure.getScaleX());
         clip.setScaleY(1 / figure.getScaleY());
         figure.setClip(clip);
     }
     
-    private void updateSquare() {
+    private void recalculateSquare() {
         double square =
                 Math.round(SizeConverter.squareToCm(figure.getSquare()) * 1000) / (double) 1000;
         squareField.setText(String.valueOf(square));
