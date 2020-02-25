@@ -29,10 +29,10 @@ public class Figure extends Group
     }
     
     public double getSquare() {
-        double trianglesSquare = pow(squareSize, 2) * (3 - 2 * sqrt(2));
+        double octagonSquare = 2 * pow(squareSize, 2) / (1 + sqrt(2));
         double r = squareSize / 2;
         double circleSquare = PI * r * r;
-        return pow(squareSize, 2) - (trianglesSquare + circleSquare);
+        return octagonSquare - circleSquare;
     }
     
     private void update() {
