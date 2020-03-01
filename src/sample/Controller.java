@@ -8,6 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.util.StringConverter;
 import logic.Figure;
 import logic.SizeConverter;
 
@@ -16,6 +17,10 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable
 {
+    private static final double MIN_SIZE = 1;
+    private static final double MAX_SIZE = 12.5;
+    private final Figure figure = new Figure();
+    
     // region FXML
     public Spinner<Double> sizeSpinner;
     public Slider scaleSlider;
@@ -25,13 +30,9 @@ public class Controller implements Initializable
     public VBox scalePane;
     // endregion
     
-    private Figure figure = new Figure();
-    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        sizeSpinner.setValueFactory(new SpinnerValueFactory
-                .DoubleSpinnerValueFactory(1, 12.5, 4.5, 0.1));
-        sizeSpinner.valueProperty().addListener(e -> update());
+        initSizeSpinner();
         scaleSlider.valueProperty().addListener(e -> update());
         shapePane.widthProperty().addListener(e -> update());
         shapePane.heightProperty().addListener(e -> update());
@@ -39,10 +40,34 @@ public class Controller implements Initializable
         fitToWindowCb.selectedProperty().addListener(e -> updateViewMode());
     }
     
+    private void initSizeSpinner() {
+        double initialSize = (MAX_SIZE - MIN_SIZE) / 2;
+        sizeSpinner.setValueFactory(
+                new SpinnerValueFactory.DoubleSpinnerValueFactory(MIN_SIZE, MAX_SIZE, initialSize, 0.1));
+        sizeSpinner.valueProperty().addListener(e -> update());
+        sizeSpinner.getEditor().setOnAction(e -> updateSpinnerEditor());
+        sizeSpinner.focusedProperty().addListener(e -> updateSpinnerEditor());
+    }
+    
+    private void updateSpinnerEditor() {
+        TextField editor = sizeSpinner.getEditor();
+        SpinnerValueFactory<Double> valueFactory = sizeSpinner.getValueFactory();
+        StringConverter<Double> converter = valueFactory.getConverter();
+        double newValue;
+        try {
+            newValue = converter.fromString(editor.getText());
+            valueFactory.setValue(newValue);
+        } catch (RuntimeException ex) {
+            newValue = sizeSpinner.getValue();
+            editor.setText(converter.toString(newValue));
+        }
+    }
+    
     @FXML
     private void updateViewMode() {
         resetScale();
         scalePane.setDisable(fitToWindowCb.isSelected());
+        sizeSpinner.setEditable(!fitToWindowCb.isSelected());
         update();
     }
     
@@ -54,7 +79,7 @@ public class Controller implements Initializable
     private void repaintFigure() {
         updateFigureSize();
         updateFigureScale();
-        updateFigureTranslate();
+        updateFigureLocation();
         clipFigure();
     }
     
@@ -80,7 +105,7 @@ public class Controller implements Initializable
         figure.setScale(scale);
     }
     
-    private void updateFigureTranslate() {
+    private void updateFigureLocation() {
         double x = (shapePane.getWidth() - figure.getSquareDiagonal()) / 2;
         double y = (shapePane.getHeight() - figure.getSquareDiagonal()) / 2;
         figure.setTranslateX(x);
