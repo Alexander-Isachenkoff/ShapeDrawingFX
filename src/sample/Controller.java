@@ -10,6 +10,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.util.StringConverter;
 import logic.Figure;
+import logic.Rounding;
 import logic.SizeConverter;
 
 import java.net.URL;
@@ -42,8 +43,12 @@ public class Controller implements Initializable
     
     private void initSizeSpinner() {
         double initialSize = (MAX_SIZE - MIN_SIZE) / 2;
-        sizeSpinner.setValueFactory(
-                new SpinnerValueFactory.DoubleSpinnerValueFactory(MIN_SIZE, MAX_SIZE, initialSize, 0.1));
+        SpinnerValueFactory.DoubleSpinnerValueFactory valueFactory =
+                new SpinnerValueFactory.DoubleSpinnerValueFactory(MIN_SIZE, MAX_SIZE);
+        sizeSpinner.setValueFactory(valueFactory);
+        valueFactory.setAmountToStepBy(0.1);
+        valueFactory.setConverter(new IgnoreSeparatorStringConverter());
+        valueFactory.setValue(initialSize);
         sizeSpinner.valueProperty().addListener(e -> update());
         sizeSpinner.getEditor().setOnAction(e -> updateSpinnerEditor());
         sizeSpinner.focusedProperty().addListener(e -> updateSpinnerEditor());
@@ -57,7 +62,7 @@ public class Controller implements Initializable
         try {
             newValue = converter.fromString(editor.getText());
             valueFactory.setValue(newValue);
-        } catch (RuntimeException ex) {
+        } catch (NumberFormatException ex) {
             newValue = sizeSpinner.getValue();
             editor.setText(converter.toString(newValue));
         }
@@ -122,9 +127,9 @@ public class Controller implements Initializable
     }
     
     private void recalculateSquare() {
-        double square =
-                Math.round(SizeConverter.squareToCm(figure.getSquare()) * 1000) / (double) 1000;
-        squareField.setText(String.valueOf(square));
+        double accurateSquare = SizeConverter.squareToCm(figure.getSquare());
+        double roundedSquare = Rounding.roundTo(accurateSquare, 3);
+        squareField.setText(String.valueOf(roundedSquare));
     }
     
     @FXML
