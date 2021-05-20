@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable
 {
     private static final double MIN_SIZE = 1;
-    private static final double MAX_SIZE = 12.5;
+    private static final double MAX_SIZE = 12.7;
     private final Figure figure = new Figure();
     
     // region FXML
@@ -47,7 +47,7 @@ public class Controller implements Initializable
                 new SpinnerValueFactory.DoubleSpinnerValueFactory(MIN_SIZE, MAX_SIZE);
         sizeSpinner.setValueFactory(valueFactory);
         valueFactory.setAmountToStepBy(0.1);
-        valueFactory.setConverter(new IgnoreSeparatorStringConverter());
+        valueFactory.setConverter(new IgnoreSeparatorStringConverter("см"));
         valueFactory.setValue(initialSize);
         sizeSpinner.valueProperty().addListener(e -> update());
         sizeSpinner.getEditor().setOnAction(e -> updateSpinnerEditor());
@@ -61,11 +61,11 @@ public class Controller implements Initializable
         double newValue;
         try {
             newValue = converter.fromString(editor.getText());
-            valueFactory.setValue(newValue);
         } catch (NumberFormatException ex) {
             newValue = sizeSpinner.getValue();
-            editor.setText(converter.toString(newValue));
         }
+        valueFactory.setValue(newValue);
+        editor.setText(converter.toString(newValue));
     }
     
     @FXML
@@ -77,37 +77,28 @@ public class Controller implements Initializable
     }
     
     private void update() {
-        repaintFigure();
+        updateFigure();
         recalculateSquare();
     }
     
-    private void repaintFigure() {
-        updateFigureSize();
-        updateFigureScale();
-        updateFigureLocation();
-        clipFigure();
-    }
-    
-    private void updateFigureSize() {
-        double size;
+    private void updateFigure() {
+        double size, scale;
         if (fitToWindowCb.isSelected()) {
             size = Math.min(shapePane.getWidth(), shapePane.getHeight()) / Math.sqrt(2);
             sizeSpinner.getValueFactory().setValue(SizeConverter.toCm(size));
-        } else {
-            double cm = sizeSpinner.getValue();
-            size = SizeConverter.toPixels(cm);
-        }
-        figure.setSize(size);
-    }
-    
-    private void updateFigureScale() {
-        double scale;
-        if (fitToWindowCb.isSelected()) {
             scale = 1;
         } else {
+            size = SizeConverter.toPixels(sizeSpinner.getValue());
             scale = scaleSlider.getValue() / 100;
         }
+        repaintFigure(size, scale);
+    }
+    
+    private void repaintFigure(double size, double scale) {
+        figure.setSize(size);
         figure.setScale(scale);
+        updateFigureLocation();
+        clipFigure();
     }
     
     private void updateFigureLocation() {
@@ -129,7 +120,7 @@ public class Controller implements Initializable
     private void recalculateSquare() {
         double accurateSquare = SizeConverter.squareToCm(figure.getSquare());
         double roundedSquare = Rounding.roundTo(accurateSquare, 3);
-        squareField.setText(String.valueOf(roundedSquare));
+        squareField.setText(roundedSquare + " см²");
     }
     
     @FXML

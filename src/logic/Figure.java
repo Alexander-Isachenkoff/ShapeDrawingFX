@@ -17,12 +17,6 @@ public class Figure extends Group
         return squareDiagonal;
     }
     
-    public void setSize(double size) {
-        squareSize = size;
-        squareDiagonal = sqrt(pow(size, 2));
-        update();
-    }
-    
     public void setScale(double scale) {
         setScaleX(scale);
         setScaleY(scale);
@@ -73,5 +67,11 @@ public class Figure extends Group
         circle.setCenterY(squareDiagonal / 2);
         circle.setRadius(squareSize / 2);
         return circle;
+    }
+    
+    public void setSize(double size) {
+        squareSize = size;
+        squareDiagonal = sqrt(pow(size, 2));
+        update();
     }
 }
